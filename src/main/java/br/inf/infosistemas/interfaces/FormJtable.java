@@ -55,6 +55,9 @@ public class FormJtable extends javax.swing.JFrame {
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         jLabelData.setText(formato.format(dataSistema));
 
+        // this.jProgressBarExportXml.setValue(50);
+        //this.jProgressBarExportXml.setValue(60);
+        //this.jProgressBarExportXml.setMaximum(100);
     }
 
     /**
@@ -252,7 +255,9 @@ public class FormJtable extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(JFormattedTextFieldDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(salvarConfig)))
-                            .addComponent(jProgressBarExportXml, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(jProgressBarExportXml, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 10, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -312,22 +317,36 @@ public class FormJtable extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void exportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportarActionPerformed
-        try {
-            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
-            Date data1 = formato.parse(JFormattedTextFieldDataInicio.getText());
-            Date data2 = formato.parse(JFormattedTextFieldDataFim.getText());
-            // System.out.println(data1);
-            //System.out.println(formato.format(data1));
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
-            exportaXml(txtPath.getText(), data1, data2, config.getNfe(), config.getNfc(), config.getEntradas());
-        } catch (IOException ex) {
-            Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+        if (jCheckBoxNfce.isSelected() || jCheckBoxNfe.isSelected() || jCheckBoxEntradas.isSelected()) {
+            if (JFormattedTextFieldDataInicio.getText().trim().length() > 9 && JFormattedTextFieldDataFim.getText().trim().length() > 9) {
+
+                try {
+
+                    // System.out.println("tamanho da data" + JFormattedTextFieldDataInicio.getText().trim().length());
+                    Date data1 = formato.parse(JFormattedTextFieldDataInicio.getText());
+                    Date data2 = formato.parse(JFormattedTextFieldDataFim.getText());
+
+                    exportaXml(txtPath.getText(), data1, data2, config.getNfe(), config.getNfc(), config.getEntradas());
+                } catch (IOException ex) {
+                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ParseException ex) {
+                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Entre com uma data Valida!");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Escolha um ou mais modelos para esportação:\nNFC-e\nNF-e\nEntradas");
         }
+
+        // System.out.println(data1);
+        //System.out.println(formato.format(data1));
+
     }//GEN-LAST:event_exportarActionPerformed
 
     /*
@@ -430,10 +449,10 @@ public class FormJtable extends javax.swing.JFrame {
             ResultSet rs = null;
             Connection connection = Conexao.conectar();
             PreparedStatement stmt;
-            
-            System.out.println("entrou no pach, " + "nfe: " + xmlNfe + ", nfc: " + xmlNfc + ", entradas: " + xmlEntrada);
+
+            //System.out.println("entrou no pach, " + "nfe: " + xmlNfe + ", nfc: " + xmlNfc + ", entradas: " + xmlEntrada);
             if (null != dataI && null != dataF) {
-                System.out.println("entrou na data, " + "nfe: " + xmlNfe + ", nfc: " + xmlNfc + ", entradas: " + xmlEntrada);
+                //System.out.println("entrou na data, " + "nfe: " + xmlNfe + ", nfc: " + xmlNfc + ", entradas: " + xmlEntrada);
                 java.sql.Date dataInicio = new java.sql.Date(dataI.getTime());
                 java.sql.Date dataFim = new java.sql.Date(dataF.getTime());
                 //java.util.Date data = new java.util.Date(); 
@@ -446,122 +465,154 @@ public class FormJtable extends javax.swing.JFrame {
                     stmt.setDate(2, dataFim);
 
                     rs = stmt.executeQuery();
-                    int total = 0;
-                    while (rs.next()) {
 
-                        String fileName = rs.getString("ARQUIVO");
-                        Blob mapBlob = rs.getBlob("XML");
-                        byte[] arquivo = null;
-                        arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
+                    //verifica se tem conteudo
+                    if (!rs.isBeforeFirst()) {
+                        JOptionPane.showMessageDialog(null, "XML das NF-e não encontrados para o periodo informado!");
 
-                        // cria se o arquivo nao existir
-                        File file = new File(path + "\\" + fileName);
-                        if (!file.exists()) {
-                            file.createNewFile();
+                    } else {
+                        int total = 0;
+                        while (rs.next()) {
 
-                            // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
+                            String fileName = rs.getString("ARQUIVO");
+                            Blob mapBlob = rs.getBlob("XML");
+                            byte[] arquivo = null;
+                            arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
+
+                            // cria se o arquivo nao existir
+                            File file = new File(path + "\\" + fileName);
+                            if (!file.exists()) {
+                                file.createNewFile();
+
+                                // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
+                            }
+
+                            FileOutputStream fos = new FileOutputStream(file);
+                            fos.write(arquivo);
+                            total++;
+
+                            fos.close();
+                        }
+                        if (total > 0) {
+                            JOptionPane.showMessageDialog(null, "XML das NF-e foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
                         }
 
-                        FileOutputStream fos = new FileOutputStream(file);
-                        fos.write(arquivo);
-                        total++;
-
-                        fos.close();
                     }
-                    if (total>0) {
-                        JOptionPane.showMessageDialog(null, "XML das NF-e foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
-                    }
-                    
 
-                    
-                    
                 }
                 if (xmlNfc) {
                     String sqlNfc = "select * from xml_nfc where cast(data as date) between ? and ? and autorizacao<>'' ";
-                                        
+
                     stmt = connection.prepareStatement(sqlNfc);
                     stmt.setDate(1, dataInicio);
                     stmt.setDate(2, dataFim);
 
                     rs = stmt.executeQuery();
-                    int total = 0;
-                    while (rs.next()) {
 
-                        String fileName = rs.getString("CHAVE");
-                        Blob mapBlob = rs.getBlob("ARQUIVO");
-                        byte[] arquivo = null;
-                        arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
+                    if (!rs.isBeforeFirst()) {
+                        JOptionPane.showMessageDialog(null, "XML das NFC-e não encontrados para o periodo informado!");
 
-                        // cria se o arquivo nao existir
-                        File file = new File(path + "\\" + fileName + "-Nfc.xml");
-                        if (!file.exists()) {
-                            file.createNewFile();
+                    } else {
 
-                            // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
+                        int total = 0;
+                        while (rs.next()) {
+
+                            String fileName = rs.getString("CHAVE");
+                            Blob mapBlob = rs.getBlob("ARQUIVO");
+                            byte[] arquivo = null;
+                            arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
+
+                            // cria se o arquivo nao existir
+                            File file = new File(path + "\\" + fileName + "-Nfc.xml");
+                            if (!file.exists()) {
+                                file.createNewFile();
+
+                                // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
+                            }
+
+                            FileOutputStream fos = new FileOutputStream(file);
+                            fos.write(arquivo);
+                            total++;
+
+                            /*/ tread direto na classe para carregar o progress
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                jProgressBarExportXml.setValue(total);
+                                
+                                try {
+                                    sleep(200);
+                                } catch (InterruptedException ex) {
+                                    System.out.println(ex.getMessage());
+                                }
+                               
+                            }
+                            
+                        }.start(); */
+                            fos.close();
                         }
 
-                        FileOutputStream fos = new FileOutputStream(file);
-                        fos.write(arquivo);
-                        total++;
-
-                        fos.close();
-                    }
-
-                    if (total>0) {
-                        JOptionPane.showMessageDialog(null, "XML das NF-e foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
+                        if (total > 0) {
+                            JOptionPane.showMessageDialog(null, "XML das NF-e foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
+                        }
                     }
 
                 }
                 if (xmlEntrada) {
-                 String sqlEntradas = "select * from nfe_xml_entrada where cast(data as date) between ? and ? ";
+                    String sqlEntradas = "select * from nfe_xml_entrada where cast(data as date) between ? and ? ";
                     stmt = connection.prepareStatement(sqlEntradas);
                     stmt.setDate(1, dataInicio);
                     stmt.setDate(2, dataFim);
 
                     rs = stmt.executeQuery();
-                    int total = 0;
-                    while (rs.next()) {
 
-                        String fileName = rs.getString("ARQUIVO");
-                        Blob mapBlob = rs.getBlob("XML");
-                        byte[] arquivo = null;
-                        arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
+                    if (!rs.isBeforeFirst()) {
+                        JOptionPane.showMessageDialog(null, "XML das Entradas não encontrados para o periodo informado!");
 
-                        // cria se o arquivo nao existir
-                        File file = new File(path + "\\" + fileName);
-                        if (!file.exists()) {
-                            file.createNewFile();
+                    } else {
 
-                            // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
+                        int total = 0;
+                        while (rs.next()) {
+
+                            String fileName = rs.getString("ARQUIVO");
+                            Blob mapBlob = rs.getBlob("XML");
+                            byte[] arquivo = null;
+                            arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
+
+                            // cria se o arquivo nao existir
+                            File file = new File(path + "\\" + fileName);
+                            if (!file.exists()) {
+                                file.createNewFile();
+
+                                // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
+                            }
+
+                            FileOutputStream fos = new FileOutputStream(file);
+                            fos.write(arquivo);
+                            total++;
+
+                            fos.close();
                         }
 
-                        FileOutputStream fos = new FileOutputStream(file);
-                        fos.write(arquivo);
-                        total++;
+                        if (total > 0) {
+                            JOptionPane.showMessageDialog(null, "XML das Entradas foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
+                        }
 
-                        fos.close();
                     }
-
-                   if (total>0) {
-                        JOptionPane.showMessageDialog(null, "XML das Entradas foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
-                    }
-                    
 
                 }
-                connection.close();
 
             } else {
                 JOptionPane.showMessageDialog(null, "Digite um periodo valido!");
 
             }
+            connection.close();
 
         } else {
             JOptionPane.showMessageDialog(null, "Escolha uma pasta para exportação!");
         }
 
-        ResultSet rs = null;
-        Connection connection = Conexao.conectar();
-
+        //ResultSet rs = null;
     }
 
     //public void atualiza(int valor){ jProgressBarExportXml.setValue(valor); }  
@@ -597,7 +648,7 @@ public class FormJtable extends javax.swing.JFrame {
     }//GEN-LAST:event_JFormattedTextFieldDataFimKeyPressed
 
     private void jCheckBoxNfceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxNfceActionPerformed
-    config.setNfc(jCheckBoxNfce.isSelected());
+        config.setNfc(jCheckBoxNfce.isSelected());
     }//GEN-LAST:event_jCheckBoxNfceActionPerformed
 
     private void JFormattedTextFieldDataFimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JFormattedTextFieldDataFimActionPerformed
