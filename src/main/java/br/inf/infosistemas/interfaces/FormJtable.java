@@ -189,8 +189,18 @@ public class FormJtable extends javax.swing.JFrame {
         });
 
         jCheckBoxNfe.setText("NF-e");
+        jCheckBoxNfe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxNfeActionPerformed(evt);
+            }
+        });
 
         jCheckBoxEntradas.setText("Entradas");
+        jCheckBoxEntradas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxEntradasActionPerformed(evt);
+            }
+        });
 
         jLabelDB.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -310,7 +320,7 @@ public class FormJtable extends javax.swing.JFrame {
             // System.out.println(data1);
             //System.out.println(formato.format(data1));
 
-            exportaXml(txtPath.getText(), data1, data2);
+            exportaXml(txtPath.getText(), data1, data2, config.getNfe(), config.getNfc(), config.getEntradas());
         } catch (IOException ex) {
             Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -414,46 +424,143 @@ public class FormJtable extends javax.swing.JFrame {
 
     }//GEN-LAST:event_abrirDiretorioActionPerformed
 
-    public void exportaXml(String path, Date dataI, Date dataF) throws IOException, SQLException {
+    public void exportaXml(String path, Date dataI, Date dataF, Boolean xmlNfe, Boolean xmlNfc, Boolean xmlEntrada) throws IOException, SQLException {
+
+        if (!path.isEmpty()) {
+            ResultSet rs = null;
+            Connection connection = Conexao.conectar();
+            PreparedStatement stmt;
+            
+            System.out.println("entrou no pach, " + "nfe: " + xmlNfe + ", nfc: " + xmlNfc + ", entradas: " + xmlEntrada);
+            if (null != dataI && null != dataF) {
+                System.out.println("entrou na data, " + "nfe: " + xmlNfe + ", nfc: " + xmlNfc + ", entradas: " + xmlEntrada);
+                java.sql.Date dataInicio = new java.sql.Date(dataI.getTime());
+                java.sql.Date dataFim = new java.sql.Date(dataF.getTime());
+                //java.util.Date data = new java.util.Date(); 
+
+                //entra para exportar, testar parametros
+                if (xmlNfe) {
+                    String sqlNfe = "select * from nfe_xml where cast(data as date) between ? and ? ";
+                    stmt = connection.prepareStatement(sqlNfe);
+                    stmt.setDate(1, dataInicio);
+                    stmt.setDate(2, dataFim);
+
+                    rs = stmt.executeQuery();
+                    int total = 0;
+                    while (rs.next()) {
+
+                        String fileName = rs.getString("ARQUIVO");
+                        Blob mapBlob = rs.getBlob("XML");
+                        byte[] arquivo = null;
+                        arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
+
+                        // cria se o arquivo nao existir
+                        File file = new File(path + "\\" + fileName);
+                        if (!file.exists()) {
+                            file.createNewFile();
+
+                            // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
+                        }
+
+                        FileOutputStream fos = new FileOutputStream(file);
+                        fos.write(arquivo);
+                        total++;
+
+                        fos.close();
+                    }
+                    if (total>0) {
+                        JOptionPane.showMessageDialog(null, "XML das NF-e foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
+                    }
+                    
+
+                    
+                    
+                }
+                if (xmlNfc) {
+                    String sqlNfc = "select * from xml_nfc where cast(data as date) between ? and ? and autorizacao<>'' ";
+                                        
+                    stmt = connection.prepareStatement(sqlNfc);
+                    stmt.setDate(1, dataInicio);
+                    stmt.setDate(2, dataFim);
+
+                    rs = stmt.executeQuery();
+                    int total = 0;
+                    while (rs.next()) {
+
+                        String fileName = rs.getString("CHAVE");
+                        Blob mapBlob = rs.getBlob("ARQUIVO");
+                        byte[] arquivo = null;
+                        arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
+
+                        // cria se o arquivo nao existir
+                        File file = new File(path + "\\" + fileName + "-Nfc.xml");
+                        if (!file.exists()) {
+                            file.createNewFile();
+
+                            // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
+                        }
+
+                        FileOutputStream fos = new FileOutputStream(file);
+                        fos.write(arquivo);
+                        total++;
+
+                        fos.close();
+                    }
+
+                    if (total>0) {
+                        JOptionPane.showMessageDialog(null, "XML das NF-e foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
+                    }
+
+                }
+                if (xmlEntrada) {
+                 String sqlEntradas = "select * from nfe_xml_entrada where cast(data as date) between ? and ? ";
+                    stmt = connection.prepareStatement(sqlEntradas);
+                    stmt.setDate(1, dataInicio);
+                    stmt.setDate(2, dataFim);
+
+                    rs = stmt.executeQuery();
+                    int total = 0;
+                    while (rs.next()) {
+
+                        String fileName = rs.getString("ARQUIVO");
+                        Blob mapBlob = rs.getBlob("XML");
+                        byte[] arquivo = null;
+                        arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
+
+                        // cria se o arquivo nao existir
+                        File file = new File(path + "\\" + fileName);
+                        if (!file.exists()) {
+                            file.createNewFile();
+
+                            // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
+                        }
+
+                        FileOutputStream fos = new FileOutputStream(file);
+                        fos.write(arquivo);
+                        total++;
+
+                        fos.close();
+                    }
+
+                   if (total>0) {
+                        JOptionPane.showMessageDialog(null, "XML das Entradas foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
+                    }
+                    
+
+                }
+                connection.close();
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Digite um periodo valido!");
+
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Escolha uma pasta para exportação!");
+        }
 
         ResultSet rs = null;
         Connection connection = Conexao.conectar();
-        String sql = "select * from xml_nfc where cast(data as date) between ? and ? and autorizacao<>'' ";
-        //java.util.Date data = new java.util.Date();  
-        java.sql.Date dataInicio = new java.sql.Date(dataI.getTime());
-        java.sql.Date dataFim = new java.sql.Date(dataF.getTime());
-
-        PreparedStatement stmt = connection.prepareStatement(sql);
-        stmt.setDate(1, dataInicio);
-        stmt.setDate(2, dataFim);
-
-        rs = stmt.executeQuery();
-        int total = 0;
-        while (rs.next()) {
-            
-            String fileName = rs.getString("CHAVE");
-            Blob mapBlob = rs.getBlob("ARQUIVO");
-            byte[] arquivo = null;
-            arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
-
-            // cria se o arquivo nao existir
-            File file = new File(path + "\\" + fileName + ".xml");
-            if (!file.exists()) {
-                file.createNewFile();
-
-                // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
-            }
-
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(arquivo);
-            total++;
-
-            fos.close();
-        }
-
-        JOptionPane.showMessageDialog(null, "XML Exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
-
-        connection.close();
 
     }
 
@@ -490,12 +597,20 @@ public class FormJtable extends javax.swing.JFrame {
     }//GEN-LAST:event_JFormattedTextFieldDataFimKeyPressed
 
     private void jCheckBoxNfceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxNfceActionPerformed
-
+    config.setNfc(jCheckBoxNfce.isSelected());
     }//GEN-LAST:event_jCheckBoxNfceActionPerformed
 
     private void JFormattedTextFieldDataFimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JFormattedTextFieldDataFimActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_JFormattedTextFieldDataFimActionPerformed
+
+    private void jCheckBoxNfeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxNfeActionPerformed
+        config.setNfe(jCheckBoxNfe.isSelected());
+    }//GEN-LAST:event_jCheckBoxNfeActionPerformed
+
+    private void jCheckBoxEntradasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxEntradasActionPerformed
+        config.setEntradas(jCheckBoxEntradas.isSelected());
+    }//GEN-LAST:event_jCheckBoxEntradasActionPerformed
 
     /**
      * @param args the command line arguments

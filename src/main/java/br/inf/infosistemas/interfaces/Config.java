@@ -18,9 +18,9 @@ public class Config implements Serializable {
     
    private String path;
    private String hora;
-   private Boolean nfc;
-   private Boolean nfe;
-   private Boolean entradas;
+   private Boolean nfc = false;
+   private Boolean nfe = false;
+   private Boolean entradas= false;
    private Date dataInicio;
    private Date dataFim;
 

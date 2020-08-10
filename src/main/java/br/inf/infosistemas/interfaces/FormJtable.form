@@ -262,11 +262,17 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="NF-e"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxNfeActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxEntradas">
           <Properties>
             <Property name="text" type="java.lang.String" value="Entradas"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBoxEntradasActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabelDB">
           <Properties>
