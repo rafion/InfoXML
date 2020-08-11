@@ -55,6 +55,7 @@ public class FormJtable extends javax.swing.JFrame {
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         jLabelData.setText(formato.format(dataSistema));
         jProgressBarExportXml.setVisible(false);
+        jProgressBarExportXml.setStringPainted(true);
         
 
         // this.jProgressBarExportXml.setValue(50);
@@ -87,7 +88,6 @@ public class FormJtable extends javax.swing.JFrame {
         jCheckBoxNfce = new javax.swing.JCheckBox();
         jCheckBoxNfe = new javax.swing.JCheckBox();
         jCheckBoxEntradas = new javax.swing.JCheckBox();
-        jLabelDB = new javax.swing.JLabel();
         jLabelData = new javax.swing.JLabel();
         jProgressBarExportXml = new javax.swing.JProgressBar();
 
@@ -207,8 +207,6 @@ public class FormJtable extends javax.swing.JFrame {
             }
         });
 
-        jLabelDB.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
         jLabelData.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -222,16 +220,25 @@ public class FormJtable extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(abrirDiretorio))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabelDB, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(52, 52, 52))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(145, 145, 145)
                                 .addComponent(jLabel4))
                             .addComponent(jLabel1)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(JFormattedTextFieldDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(JFormattedTextFieldDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(salvarConfig)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(jProgressBarExportXml, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -246,20 +253,9 @@ public class FormJtable extends javax.swing.JFrame {
                                         .addGap(21, 21, 21)
                                         .addComponent(exportar))
                                     .addComponent(jCheckBoxEntradas)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(JFormattedTextFieldDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(JFormattedTextFieldDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(salvarConfig)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(jProgressBarExportXml, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabelData, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 10, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -292,10 +288,9 @@ public class FormJtable extends javax.swing.JFrame {
                 .addComponent(salvarConfig)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jProgressBarExportXml, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabelDB, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
-                    .addComponent(jLabelData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelData, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -458,6 +453,7 @@ public class FormJtable extends javax.swing.JFrame {
                         connection = Conexao.conectar();
                     } catch (IOException ex) {
                         Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                        //JOptionPane.showMessageDialog(null, "Conexão firebird falhou!\nVerifique se o banco esta em:\nC:\\info Sistemas\\dados");
                     }
                     PreparedStatement stmt = null;
 
@@ -518,6 +514,7 @@ public class FormJtable extends javax.swing.JFrame {
                                     // rs.beforeFirst(); // volta o resultset para o inicio
                                     //firebird não suporta as operações acima 
                                     jProgressBarExportXml.setVisible(true);
+                                    jProgressBarExportXml.setString("Exportando as NF-e");
                                     while (rs.next()) {
 
                                         String fileName = rs.getString("ARQUIVO");
@@ -576,7 +573,7 @@ public class FormJtable extends javax.swing.JFrame {
                         }
                         if (xmlNfc) {
                             //gambiarra para capturar o numero de linhas ja que o firebird não retorna pelas funções resultset
-                            String sqlCountRegistros = "select count(*) as numeroLinhas from xml_nfc where cast(data as date) between ? and ? ";
+                            String sqlCountRegistros = "select count(*) as numeroLinhas from xml_nfc where cast(data as date) between ? and ? and autorizacao<>'' ";
                             try {
                                 stmt = connection.prepareStatement(sqlCountRegistros);
                                 stmt.setDate(1, dataInicio);
@@ -585,7 +582,7 @@ public class FormJtable extends javax.swing.JFrame {
                                 int numeroLinhas = 0;
                                 while (rs.next()) {
                                     numeroLinhas = rs.getInt("numeroLinhas");
-                                    //System.out.println("numero de linhas do resultset: " + numeroLinhas); 
+                                    System.out.println("numero de linhas do resultset: " + numeroLinhas); 
 
                                 }
                                 jProgressBarExportXml.setMaximum(numeroLinhas);
@@ -629,6 +626,7 @@ public class FormJtable extends javax.swing.JFrame {
 
                                     int total = 0;
                                     jProgressBarExportXml.setVisible(true);
+                                    jProgressBarExportXml.setString("Exportando as NFC-e");
                                     while (rs.next()) {
 
                                         String fileName = rs.getString("CHAVE");
@@ -661,27 +659,13 @@ public class FormJtable extends javax.swing.JFrame {
                                         }
                                         total++;
                                         jProgressBarExportXml.setValue(total);
-
                                         try {
-                                            /*/ tread direto na classe para carregar o progress
-                                    new Thread(){
-                                    @Override
-                                    public void run() {
-                                    jProgressBarExportXml.setValue(total);
-                                    
-                                    try {
-                                    sleep(200);
-                                    } catch (InterruptedException ex) {
-                                    System.out.println(ex.getMessage());
-                                    }
-                                    
-                                    }
-                                    
-                                    }.start(); */
-                                            fos.close();
-                                        } catch (IOException ex) {
-                                            Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                            sleep(100);
+                                        } catch (InterruptedException ex) {
+                                            System.out.println(ex.getMessage());
                                         }
+
+                                        
                                     }
 
                                     if (total > 0) {
@@ -749,6 +733,7 @@ public class FormJtable extends javax.swing.JFrame {
 
                                     int total = 0;
                                     jProgressBarExportXml.setVisible(true);
+                                    jProgressBarExportXml.setString("Exportando as Entradas");
                                     while (rs.next()) {
 
                                         String fileName = rs.getString("ARQUIVO");
@@ -768,6 +753,11 @@ public class FormJtable extends javax.swing.JFrame {
                                         fos.write(arquivo);
                                         total++;
                                         jProgressBarExportXml.setValue(total);
+                                        try {
+                                            sleep(100);
+                                        } catch (InterruptedException ex) {
+                                            System.out.println(ex.getMessage());
+                                        }
                                         fos.close();
                                     }
 
@@ -917,7 +907,6 @@ public class FormJtable extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabelDB;
     private javax.swing.JLabel jLabelData;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JProgressBar jProgressBarExportXml;
