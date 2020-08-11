@@ -4,12 +4,12 @@ br\inf\infosistemas\util\IconeNoTray.class
 br\inf\infosistemas\interfaces\FormJtable$1.class
 br\inf\infosistemas\main\InfoXml.class
 br\inf\infosistemas\util\IconeNoTray$2.class
+br\inf\infosistemas\interfaces\FormJtable$15.class
 br\inf\infosistemas\interfaces\FormJtable$6.class
 br\inf\infosistemas\interfaces\FormJtable.class
 br\inf\infosistemas\interfaces\FormJtable$5.class
 br\inf\infosistemas\interfaces\FormJtable$10.class
 br\inf\infosistemas\util\IconeNoTray$3.class
-br\inf\infosistemas\main\ExportaXml.class
 br\inf\infosistemas\interfaces\FormJtable$13.class
 br\inf\infosistemas\interfaces\FormJtable$8.class
 br\inf\infosistemas\util\PropertiesLoader.class
