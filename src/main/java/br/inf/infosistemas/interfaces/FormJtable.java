@@ -6,32 +6,25 @@
 package br.inf.infosistemas.interfaces;
 
 import br.inf.infosistemas.dao.Conexao;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.nio.file.Path;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 /**
@@ -56,7 +49,6 @@ public class FormJtable extends javax.swing.JFrame {
         jLabelData.setText(formato.format(dataSistema));
         jProgressBarExportXml.setVisible(false);
         jProgressBarExportXml.setStringPainted(true);
-        
 
         // this.jProgressBarExportXml.setValue(50);
         //this.jProgressBarExportXml.setValue(60);
@@ -72,6 +64,7 @@ public class FormJtable extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenu3 = new javax.swing.JMenu();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -90,6 +83,11 @@ public class FormJtable extends javax.swing.JFrame {
         jCheckBoxEntradas = new javax.swing.JCheckBox();
         jLabelData = new javax.swing.JLabel();
         jProgressBarExportXml = new javax.swing.JProgressBar();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+
+        jMenu3.setText("jMenu3");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Exportador de XML");
@@ -284,7 +282,7 @@ public class FormJtable extends javax.swing.JFrame {
                     .addComponent(JFormattedTextFieldDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
                     .addComponent(exportar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addComponent(salvarConfig)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jProgressBarExportXml, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -292,6 +290,20 @@ public class FormJtable extends javax.swing.JFrame {
                 .addComponent(jLabelData, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        jMenu1.setText("Config");
+
+        jMenuItem2.setText("Data Base");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -314,31 +326,33 @@ public class FormJtable extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void exportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportarActionPerformed
+//JOptionPane.showMessageDialog(null, "botao exporta foi precionado!");
+        try {
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+            if (jCheckBoxNfce.isSelected() || jCheckBoxNfe.isSelected() || jCheckBoxEntradas.isSelected()) {
+                if (JFormattedTextFieldDataInicio.getText().trim().length() > 9 && JFormattedTextFieldDataFim.getText().trim().length() > 9) {
 
-        if (jCheckBoxNfce.isSelected() || jCheckBoxNfe.isSelected() || jCheckBoxEntradas.isSelected()) {
-            if (JFormattedTextFieldDataInicio.getText().trim().length() > 9 && JFormattedTextFieldDataFim.getText().trim().length() > 9) {
+                    try {
 
-                try {
+                        // System.out.println("tamanho da data" + JFormattedTextFieldDataInicio.getText().trim().length());
+                        Date data1 = formato.parse(JFormattedTextFieldDataInicio.getText());
+                        Date data2 = formato.parse(JFormattedTextFieldDataFim.getText());
 
-                    // System.out.println("tamanho da data" + JFormattedTextFieldDataInicio.getText().trim().length());
-                    Date data1 = formato.parse(JFormattedTextFieldDataInicio.getText());
-                    Date data2 = formato.parse(JFormattedTextFieldDataFim.getText());
-
-                    exportaXml(txtPath.getText(), data1, data2, config.getNfe(), config.getNfc(), config.getEntradas());
-                } catch (IOException ex) {
-                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ParseException ex) {
-                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                        exportaXml(txtPath.getText(), data1, data2, jCheckBoxNfe.isSelected(), jCheckBoxNfce.isSelected(), jCheckBoxEntradas.isSelected());
+                    } catch (ParseException ex) {
+                        Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Entre com uma data Valida!");
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Entre com uma data Valida!");
+                JOptionPane.showMessageDialog(null, "Escolha um ou mais modelos para esportação:\nNFC-e\nNF-e\nEntradas");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Escolha um ou mais modelos para esportação:\nNFC-e\nNF-e\nEntradas");
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(null, "erro: " + e);
         }
 
         // System.out.println(data1);
@@ -382,19 +396,23 @@ public class FormJtable extends javax.swing.JFrame {
         //Date d = (Date) sdf.parse(hora);
 
         // config = new Config(txtPath.getText(), hora);
-        config = new Config(txtPath.getText(), hora, jCheckBoxNfce.isSelected(), jCheckBoxNfe.isSelected(), jCheckBoxEntradas.isSelected());
+        if (!txtPath.getText().isEmpty()) {
+            config = new Config(txtPath.getText(), hora, jCheckBoxNfce.isSelected(), jCheckBoxNfe.isSelected(), jCheckBoxEntradas.isSelected());
+            config.salvar();
+        } else {
+            JOptionPane.showMessageDialog(null, "Dados invalidos, Preencha corretamente");
+        }
+
         //config = new Config();
         //System.out.println("hora capturada: " + hora);
         // System.out.println("selectd nfe: " + jCheckBoxNfce.isSelected());
         // } catch (ParseException e) { e.printStackTrace(); }
-
-        try {
-            ObjectOutputStream arquivoGravar = new ObjectOutputStream(new FileOutputStream(new File("infoxml.dat")));
-            arquivoGravar.writeObject(config); //aqui entra o objeto
-            JOptionPane.showMessageDialog(null, "Configuração gravada com sucesso");
-        } catch (IOException erro) {
-            JOptionPane.showMessageDialog(null, "Erro ao tentar gravar os dados no aquivo infoxml.dat, erro: " + erro);
-        }
+        // try {
+        //     ObjectOutputStream arquivoGravar = new ObjectOutputStream(new FileOutputStream(new File("infoxml.dat")));
+        //     JOptionPane.showMessageDialog(null, "Configuração gravada com sucesso");
+        // } catch (IOException erro) {
+        //     JOptionPane.showMessageDialog(null, "Erro ao tentar gravar os dados no aquivo infoxml.dat, erro: " + erro);
+        // }
 
     }//GEN-LAST:event_salvarConfigActionPerformed
 
@@ -440,357 +458,368 @@ public class FormJtable extends javax.swing.JFrame {
 
     }//GEN-LAST:event_abrirDiretorioActionPerformed
 
-    public void exportaXml(String path, Date dataI, Date dataF, Boolean xmlNfe, Boolean xmlNfc, Boolean xmlEntrada) throws IOException, SQLException {
+    public void exportaXml(String path, Date dataI, Date dataF, Boolean xmlNfe, Boolean xmlNfc, Boolean xmlEntrada) {
 
-        new Thread() {
-            @Override
-            public void run() {
+        try {
+            new Thread() {
+                @Override
+                public void run() {
 
-                if (!path.isEmpty()) {
-                    ResultSet rs = null;
-                    Connection connection = null;
-                    try {
-                        connection = Conexao.conectar();
-                    } catch (IOException ex) {
-                        Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                        //JOptionPane.showMessageDialog(null, "Conexão firebird falhou!\nVerifique se o banco esta em:\nC:\\info Sistemas\\dados");
-                    }
-                    PreparedStatement stmt = null;
+                    if (!path.isEmpty()) {
+                        //JOptionPane.showMessageDialog(null, "entrou no if principal. verificou o path" + path);
+                        ResultSet rs = null;
+                        Connection connection = null;
 
-                    //System.out.println("entrou no pach, " + "nfe: " + xmlNfe + ", nfc: " + xmlNfc + ", entradas: " + xmlEntrada);
-                    if (null != dataI && null != dataF) {
-                        //System.out.println("entrou na data, " + "nfe: " + xmlNfe + ", nfc: " + xmlNfc + ", entradas: " + xmlEntrada);
-                        java.sql.Date dataInicio = new java.sql.Date(dataI.getTime());
-                        java.sql.Date dataFim = new java.sql.Date(dataF.getTime());
-                        //java.util.Date data = new java.util.Date(); 
+                        try {
+                            connection = Conexao.conectar();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
 
-                        //entra para exportar, testar parametros
-                        if (xmlNfe) {
-                            //como o firebird não esta retornando numero de linhas com a função last(), uso outro resultset
-                            String sqlCountRegistros = "select count(*) as numeroLinhas from nfe_xml where cast(data as date) between ? and ? ";
-                            try {
-                                stmt = connection.prepareStatement(sqlCountRegistros);
-                                stmt.setDate(1, dataInicio);
-                                stmt.setDate(2, dataFim);
-                                rs = stmt.executeQuery();
-                                int numeroLinhas = 0;
-                                while (rs.next()) {
-                                    numeroLinhas = rs.getInt("numeroLinhas");
-                                    //System.out.println("numero de linhas do resultset: " + numeroLinhas); 
+                        PreparedStatement stmt = null;
 
-                                }
-                                jProgressBarExportXml.setMaximum(numeroLinhas);
+                        //System.out.println("entrou no pach, " + "nfe: " + xmlNfe + ", nfc: " + xmlNfc + ", entradas: " + xmlEntrada);
+                        if (null != dataI && null != dataF) {
+                            jProgressBarExportXml.setVisible(true);
+                            jProgressBarExportXml.setString("Verificando xml... Aguarde...");
+                            //JOptionPane.showMessageDialog(null, "apos conectar entrou na data");
+                            //System.out.println("entrou na data, " + "nfe: " + xmlNfe + ", nfc: " + xmlNfc + ", entradas: " + xmlEntrada);
+                            java.sql.Date dataInicio = new java.sql.Date(dataI.getTime());
+                            java.sql.Date dataFim = new java.sql.Date(dataF.getTime());
+                            //java.util.Date data = new java.util.Date(); 
 
-                            } catch (SQLException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            stmt = null;
-                            rs = null;
-                            //fim da gambiarra para pegar o numero de linhas do resultset
-
-                            String sqlNfe = "select * from nfe_xml where cast(data as date) between ? and ? ";
-
-                            try {
-                                stmt = connection.prepareStatement(sqlNfe);
-                                stmt.setDate(1, dataInicio);
-                                stmt.setDate(2, dataFim);
-                                rs = stmt.executeQuery();
-                            } catch (SQLException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-
-                            try {
-                                //verifica se tem conteudo
-                                if (!rs.isBeforeFirst()) {
-                                    JOptionPane.showMessageDialog(null, "XML das NF-e não encontrados para o periodo informado!");
-
-                                } else {
-                                    int total = 0;
-                                    //System.out.println("numero de linhas do resultset: " + rs.last());
-                                    //rs.last(); //vai para o final do resultset
-                                    // int count = rs.getRow(); // agora count tem o numero de linhas para a barra de progresso
-                                    //System.out.println("numero de linhas do resultset: " + count);                                   
-                                    //  jProgressBarExportXml.set;
-                                    // rs.beforeFirst(); // volta o resultset para o inicio
-                                    //firebird não suporta as operações acima 
-                                    jProgressBarExportXml.setVisible(true);
-                                    jProgressBarExportXml.setString("Exportando as NF-e");
+                            //entra para exportar, testar parametros
+                            if (xmlNfe) {
+                                // JOptionPane.showMessageDialog(null, "apos data entrou na NFE");
+                                //como o firebird não esta retornando numero de linhas com a função last(), uso outro resultset
+                                String sqlCountRegistros = "select count(*) as numeroLinhas from nfe_xml where cast(data as date) between ? and ? ";
+                                try {
+                                    stmt = connection.prepareStatement(sqlCountRegistros);
+                                    stmt.setDate(1, dataInicio);
+                                    stmt.setDate(2, dataFim);
+                                    rs = stmt.executeQuery();
+                                    int numeroLinhas = 0;
                                     while (rs.next()) {
+                                        numeroLinhas = rs.getInt("numeroLinhas");
+                                        //System.out.println("numero de linhas do resultset: " + numeroLinhas); 
 
-                                        String fileName = rs.getString("ARQUIVO");
-                                        Blob mapBlob = rs.getBlob("XML");
-                                        byte[] arquivo = null;
-                                        arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
+                                    }
+                                    jProgressBarExportXml.setMaximum(numeroLinhas);
 
-                                        // cria se o arquivo nao existir
-                                        File file = new File(path + "\\" + fileName);
-                                        if (!file.exists()) {
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                stmt = null;
+                                rs = null;
+                                //fim da gambiarra para pegar o numero de linhas do resultset
+
+                                String sqlNfe = "select * from nfe_xml where cast(data as date) between ? and ? ";
+
+                                try {
+                                    stmt = connection.prepareStatement(sqlNfe);
+                                    stmt.setDate(1, dataInicio);
+                                    stmt.setDate(2, dataFim);
+                                    rs = stmt.executeQuery();
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
+                                try {
+                                    //verifica se tem conteudo
+                                    if (!rs.isBeforeFirst()) {
+                                        JOptionPane.showMessageDialog(null, "XML das NF-e não encontrados para o periodo informado!");
+
+                                    } else {
+                                        int total = 0;
+                                        //System.out.println("numero de linhas do resultset: " + rs.last());
+                                        //rs.last(); //vai para o final do resultset
+                                        // int count = rs.getRow(); // agora count tem o numero de linhas para a barra de progresso
+                                        //System.out.println("numero de linhas do resultset: " + count);                                   
+                                        //  jProgressBarExportXml.set;
+                                        // rs.beforeFirst(); // volta o resultset para o inicio
+                                        //firebird não suporta as operações acima 
+                                        jProgressBarExportXml.setVisible(true);
+                                        jProgressBarExportXml.setString("Exportando as NF-e");
+                                        while (rs.next()) {
+
+                                            String fileName = rs.getString("ARQUIVO");
+                                            Blob mapBlob = rs.getBlob("XML");
+                                            byte[] arquivo = null;
+                                            arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
+
+                                            // cria se o arquivo nao existir
+                                            File file = new File(path + "\\" + fileName);
+                                            if (!file.exists()) {
+                                                try {
+                                                    file.createNewFile();
+
+                                                    // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
+                                                } catch (IOException ex) {
+                                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                                }
+                                            }
+
+                                            FileOutputStream fos = null;
                                             try {
-                                                file.createNewFile();
-
-                                                // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
+                                                fos = new FileOutputStream(file);
+                                            } catch (FileNotFoundException ex) {
+                                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                            try {
+                                                fos.write(arquivo);
                                             } catch (IOException ex) {
                                                 Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
                                             }
-                                        }
-
-                                        FileOutputStream fos = null;
-                                        try {
-                                            fos = new FileOutputStream(file);
-                                        } catch (FileNotFoundException ex) {
-                                            Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
-                                        try {
-                                            fos.write(arquivo);
-                                        } catch (IOException ex) {
-                                            Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
-                                        total++;
+                                            total++;
 
 //atualizaria a barra mas não sei o tamanho do resultset, entao deixa quieto
-                                        jProgressBarExportXml.setValue(total);
-                                        try {
-                                            sleep(200);
-                                        } catch (InterruptedException ex) {
-                                            System.out.println(ex.getMessage());
+                                            jProgressBarExportXml.setValue(total);
+                                            try {
+                                                sleep(200);
+                                            } catch (InterruptedException ex) {
+                                                System.out.println(ex.getMessage());
+                                            }
+
+                                            fos.close();
+                                        }
+                                        if (total > 0) {
+                                            JOptionPane.showMessageDialog(null, "XML das NF-e foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
+                                            jProgressBarExportXml.setVisible(false);
+                                            jProgressBarExportXml.setValue(0);
                                         }
 
-                                        fos.close();
                                     }
-                                    if (total > 0) {
-                                        JOptionPane.showMessageDialog(null, "XML das NF-e foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
-                                        jProgressBarExportXml.setVisible(false);
-                                        jProgressBarExportXml.setValue(0);
-                                    }
-
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (IOException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                            } catch (SQLException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (IOException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+
                             }
-
-                        }
-                        if (xmlNfc) {
-                            //gambiarra para capturar o numero de linhas ja que o firebird não retorna pelas funções resultset
-                            String sqlCountRegistros = "select count(*) as numeroLinhas from xml_nfc where cast(data as date) between ? and ? and autorizacao<>'' ";
-                            try {
-                                stmt = connection.prepareStatement(sqlCountRegistros);
-                                stmt.setDate(1, dataInicio);
-                                stmt.setDate(2, dataFim);
-                                rs = stmt.executeQuery();
-                                int numeroLinhas = 0;
-                                while (rs.next()) {
-                                    numeroLinhas = rs.getInt("numeroLinhas");
-                                    System.out.println("numero de linhas do resultset: " + numeroLinhas); 
-
-                                }
-                                jProgressBarExportXml.setMaximum(numeroLinhas);
-
-                            } catch (SQLException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            stmt = null;
-                            rs = null;
-                            //fim da gambiarra para pegar o numero de linhas do resultset
-
-                            String sqlNfc = "select * from xml_nfc where cast(data as date) between ? and ? and autorizacao<>'' ";
-
-                            try {
-                                stmt = connection.prepareStatement(sqlNfc);
-                            } catch (SQLException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            try {
-                                stmt.setDate(1, dataInicio);
-                            } catch (SQLException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            try {
-                                stmt.setDate(2, dataFim);
-                            } catch (SQLException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-
-                            try {
-                                rs = stmt.executeQuery();
-                            } catch (SQLException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-
-                            try {
-                                if (!rs.isBeforeFirst()) {
-                                    JOptionPane.showMessageDialog(null, "XML das NFC-e não encontrados para o periodo informado!");
-
-                                } else {
-
-                                    int total = 0;
-                                    jProgressBarExportXml.setVisible(true);
-                                    jProgressBarExportXml.setString("Exportando as NFC-e");
+                            if (xmlNfc) {
+                                //gambiarra para capturar o numero de linhas ja que o firebird não retorna pelas funções resultset
+                                String sqlCountRegistros = "select count(*) as numeroLinhas from xml_nfc where cast(data as date) between ? and ? and autorizacao<>'' ";
+                                try {
+                                    stmt = connection.prepareStatement(sqlCountRegistros);
+                                    stmt.setDate(1, dataInicio);
+                                    stmt.setDate(2, dataFim);
+                                    rs = stmt.executeQuery();
+                                    int numeroLinhas = 0;
                                     while (rs.next()) {
+                                        numeroLinhas = rs.getInt("numeroLinhas");
+                                        // System.out.println("numero de linhas do resultset: " + numeroLinhas); 
 
-                                        String fileName = rs.getString("CHAVE");
-                                        Blob mapBlob = rs.getBlob("ARQUIVO");
-                                        byte[] arquivo = null;
-                                        arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
+                                    }
+                                    jProgressBarExportXml.setMaximum(numeroLinhas);
 
-                                        // cria se o arquivo nao existir
-                                        File file = new File(path + "\\" + fileName + "-Nfc.xml");
-                                        if (!file.exists()) {
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                stmt = null;
+                                rs = null;
+                                //fim da gambiarra para pegar o numero de linhas do resultset
+
+                                String sqlNfc = "select * from xml_nfc where cast(data as date) between ? and ? and autorizacao<>'' ";
+
+                                try {
+                                    stmt = connection.prepareStatement(sqlNfc);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                try {
+                                    stmt.setDate(1, dataInicio);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                try {
+                                    stmt.setDate(2, dataFim);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
+                                try {
+                                    rs = stmt.executeQuery();
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
+                                try {
+                                    if (!rs.isBeforeFirst()) {
+                                        JOptionPane.showMessageDialog(null, "XML das NFC-e não encontrados para o periodo informado!");
+
+                                    } else {
+
+                                        int total = 0;
+                                        jProgressBarExportXml.setVisible(true);
+                                        jProgressBarExportXml.setString("Exportando as NFC-e");
+                                        while (rs.next()) {
+
+                                            String fileName = rs.getString("CHAVE");
+                                            Blob mapBlob = rs.getBlob("ARQUIVO");
+                                            byte[] arquivo = null;
+                                            arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
+
+                                            // cria se o arquivo nao existir
+                                            File file = new File(path + "\\" + fileName + "-Nfc.xml");
+                                            if (!file.exists()) {
+                                                try {
+                                                    file.createNewFile();
+
+                                                    // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
+                                                } catch (IOException ex) {
+                                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                                }
+                                            }
+
+                                            FileOutputStream fos = null;
                                             try {
-                                                file.createNewFile();
-
-                                                // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
+                                                fos = new FileOutputStream(file);
+                                            } catch (FileNotFoundException ex) {
+                                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                            try {
+                                                fos.write(arquivo);
                                             } catch (IOException ex) {
                                                 Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
                                             }
+                                            total++;
+                                            jProgressBarExportXml.setValue(total);
+                                            try {
+                                                sleep(100);
+                                            } catch (InterruptedException ex) {
+                                                System.out.println(ex.getMessage());
+                                            }
+
                                         }
 
-                                        FileOutputStream fos = null;
-                                        try {
-                                            fos = new FileOutputStream(file);
-                                        } catch (FileNotFoundException ex) {
-                                            Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                        if (total > 0) {
+                                            JOptionPane.showMessageDialog(null, "XML das NF-e foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
+                                            jProgressBarExportXml.setVisible(false);
+                                            jProgressBarExportXml.setValue(0);
                                         }
-                                        try {
-                                            fos.write(arquivo);
-                                        } catch (IOException ex) {
-                                            Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
-                                        total++;
-                                        jProgressBarExportXml.setValue(total);
-                                        try {
-                                            sleep(100);
-                                        } catch (InterruptedException ex) {
-                                            System.out.println(ex.getMessage());
-                                        }
-
-                                        
                                     }
-
-                                    if (total > 0) {
-                                        JOptionPane.showMessageDialog(null, "XML das NF-e foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
-                                        jProgressBarExportXml.setVisible(false);
-                                        jProgressBarExportXml.setValue(0);
-                                    }
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                            } catch (SQLException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+
                             }
+                            if (xmlEntrada) {
+                                //gambiarra para capturar o numero de linhas ja que o firebird não retorna pelas funções resultset
+                                String sqlCountRegistros = "select count(*) as numeroLinhas from nfe_xml_entrada where cast(data as date) between ? and ? ";
+                                try {
+                                    stmt = connection.prepareStatement(sqlCountRegistros);
+                                    stmt.setDate(1, dataInicio);
+                                    stmt.setDate(2, dataFim);
+                                    rs = stmt.executeQuery();
+                                    int numeroLinhas = 0;
+                                    while (rs.next()) {
+                                        numeroLinhas = rs.getInt("numeroLinhas");
+                                        //System.out.println("numero de linhas do resultset: " + numeroLinhas); 
+
+                                    }
+                                    jProgressBarExportXml.setMaximum(numeroLinhas);
+
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                stmt = null;
+                                rs = null;
+                                //fim da gambiarra para pegar o numero de linhas do resultset
+
+                                String sqlEntradas = "select * from nfe_xml_entrada where cast(data as date) between ? and ? ";
+                                try {
+                                    stmt = connection.prepareStatement(sqlEntradas);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                try {
+                                    stmt.setDate(1, dataInicio);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                try {
+                                    stmt.setDate(2, dataFim);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
+                                try {
+                                    rs = stmt.executeQuery();
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
+                                try {
+                                    if (!rs.isBeforeFirst()) {
+                                        JOptionPane.showMessageDialog(null, "XML das Entradas não encontrados para o periodo informado!");
+
+                                    } else {
+
+                                        int total = 0;
+                                        jProgressBarExportXml.setVisible(true);
+                                        jProgressBarExportXml.setString("Exportando as Entradas");
+                                        while (rs.next()) {
+
+                                            String fileName = rs.getString("ARQUIVO");
+                                            Blob mapBlob = rs.getBlob("XML");
+                                            byte[] arquivo = null;
+                                            arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
+
+                                            // cria se o arquivo nao existir
+                                            File file = new File(path + "\\" + fileName);
+                                            if (!file.exists()) {
+                                                file.createNewFile();
+
+                                                // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
+                                            }
+
+                                            FileOutputStream fos = new FileOutputStream(file);
+                                            fos.write(arquivo);
+                                            total++;
+                                            jProgressBarExportXml.setValue(total);
+                                            try {
+                                                sleep(100);
+                                            } catch (InterruptedException ex) {
+                                                System.out.println(ex.getMessage());
+                                            }
+                                            fos.close();
+                                        }
+
+                                        if (total > 0) {
+                                            JOptionPane.showMessageDialog(null, "XML das Entradas foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
+                                            jProgressBarExportXml.setVisible(false);
+                                            jProgressBarExportXml.setValue(0);
+                                        }
+
+                                    }
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (IOException ex) {
+                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
+                            }
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Digite um periodo valido!");
 
                         }
-                        if (xmlEntrada) {
-                            //gambiarra para capturar o numero de linhas ja que o firebird não retorna pelas funções resultset
-                            String sqlCountRegistros = "select count(*) as numeroLinhas from nfe_xml_entrada where cast(data as date) between ? and ? ";
-                            try {
-                                stmt = connection.prepareStatement(sqlCountRegistros);
-                                stmt.setDate(1, dataInicio);
-                                stmt.setDate(2, dataFim);
-                                rs = stmt.executeQuery();
-                                int numeroLinhas = 0;
-                                while (rs.next()) {
-                                    numeroLinhas = rs.getInt("numeroLinhas");
-                                    //System.out.println("numero de linhas do resultset: " + numeroLinhas); 
-
-                                }
-                                jProgressBarExportXml.setMaximum(numeroLinhas);
-
-                            } catch (SQLException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            stmt = null;
-                            rs = null;
-                            //fim da gambiarra para pegar o numero de linhas do resultset
-
-                            String sqlEntradas = "select * from nfe_xml_entrada where cast(data as date) between ? and ? ";
-                            try {
-                                stmt = connection.prepareStatement(sqlEntradas);
-                            } catch (SQLException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            try {
-                                stmt.setDate(1, dataInicio);
-                            } catch (SQLException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            try {
-                                stmt.setDate(2, dataFim);
-                            } catch (SQLException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-
-                            try {
-                                rs = stmt.executeQuery();
-                            } catch (SQLException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-
-                            try {
-                                if (!rs.isBeforeFirst()) {
-                                    JOptionPane.showMessageDialog(null, "XML das Entradas não encontrados para o periodo informado!");
-
-                                } else {
-
-                                    int total = 0;
-                                    jProgressBarExportXml.setVisible(true);
-                                    jProgressBarExportXml.setString("Exportando as Entradas");
-                                    while (rs.next()) {
-
-                                        String fileName = rs.getString("ARQUIVO");
-                                        Blob mapBlob = rs.getBlob("XML");
-                                        byte[] arquivo = null;
-                                        arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
-
-                                        // cria se o arquivo nao existir
-                                        File file = new File(path + "\\" + fileName);
-                                        if (!file.exists()) {
-                                            file.createNewFile();
-
-                                            // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
-                                        }
-
-                                        FileOutputStream fos = new FileOutputStream(file);
-                                        fos.write(arquivo);
-                                        total++;
-                                        jProgressBarExportXml.setValue(total);
-                                        try {
-                                            sleep(100);
-                                        } catch (InterruptedException ex) {
-                                            System.out.println(ex.getMessage());
-                                        }
-                                        fos.close();
-                                    }
-
-                                    if (total > 0) {
-                                        JOptionPane.showMessageDialog(null, "XML das Entradas foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
-                                        jProgressBarExportXml.setVisible(false);
-                                        jProgressBarExportXml.setValue(0);
-                                    }
-
-                                }
-                            } catch (SQLException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (IOException ex) {
-                                Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-
+                        try {
+                            connection.close();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
                     } else {
-                        JOptionPane.showMessageDialog(null, "Digite um periodo valido!");
-
+                        JOptionPane.showMessageDialog(null, "Escolha uma pasta para exportação!");
                     }
-                    try {
-                        connection.close();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
-                } else {
-                    JOptionPane.showMessageDialog(null, "Escolha uma pasta para exportação!");
                 }
-            }
-        }.start();
+            }.start();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "erro na thread" + e);
+            e.printStackTrace();
+        }
+
         //ResultSet rs = null;
     }
 
@@ -842,13 +871,18 @@ public class FormJtable extends javax.swing.JFrame {
         config.setEntradas(jCheckBoxEntradas.isSelected());
     }//GEN-LAST:event_jCheckBoxEntradasActionPerformed
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        new FormDataBase().setVisible(true);
+
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) throws IOException, ClassNotFoundException {
         //substitui a interfale da configuração padrão
         try {
-            UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
+            UIManager.setLookAndFeel("com.jtattoo.plaf.texture.TextureLookAndFeel");
             // https://malalanayake.wordpress.com/2012/10/16/java-themes-with-jtattoo/
         } catch (Exception e) {
         }
@@ -908,6 +942,10 @@ public class FormJtable extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelData;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JProgressBar jProgressBarExportXml;
     private javax.swing.JButton salvarConfig;

@@ -5,17 +5,22 @@
  */
 package br.inf.infosistemas.interfaces;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Timer;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author SUPORTE02
  */
 public class Config implements Serializable {
-    
+   //da tela inicial 
    private String path;
    private String hora;
    private Boolean nfc = false;
@@ -23,7 +28,8 @@ public class Config implements Serializable {
    private Boolean entradas= false;
    private Date dataInicio;
    private Date dataFim;
-
+   
+  
     
     Config() {
         
@@ -111,6 +117,14 @@ public class Config implements Serializable {
         this.dataFim = dataFim;
     }
     
-    
+    public void salvar(){
+        try {
+            ObjectOutputStream arquivoGravar = new ObjectOutputStream(new FileOutputStream(new File("infoxml.dat")));
+            arquivoGravar.writeObject(this); //aqui entra o objeto
+            JOptionPane.showMessageDialog(null, "Configuração gravada com sucesso");
+        } catch (IOException erro) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar gravar os dados no aquivo infoxml.dat, erro: " + erro);
+        }
+    }
     
 }

@@ -9,6 +9,7 @@ package br.inf.infosistemas.dao;
  *
  * @author SUPORTE02
  */
+import br.inf.infosistemas.interfaces.ConfigDb;
 import br.inf.infosistemas.util.PropertiesLoaderImpl;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,8 +27,6 @@ public class Conexao {
 
     private static Connection conexao;
     
-     
-    
 
     public static Connection conectar() throws IOException {
         try {
@@ -37,13 +36,18 @@ public class Conexao {
                 Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-           
+            
            String host = PropertiesLoaderImpl.getValor("host");
            String porta = PropertiesLoaderImpl.getValor("porta");
            String database = PropertiesLoaderImpl.getValor("database");
            String user = PropertiesLoaderImpl.getValor("user");
            String password = PropertiesLoaderImpl.getValor("password");
            String url = PropertiesLoaderImpl.getValor("url");
+           
+          // JOptionPane.showMessageDialog(null, "load proprietes: " + host +"\n" + porta +"\n"+ database +"\n"+ user +"\n"+password +"\n"+ url);
+           //ConfigDb configdb = new ConfigDb();
+           
+           
             
             conexao = DriverManager.getConnection(
                     "jdbc:firebirdsql:" + url,
@@ -51,13 +55,13 @@ public class Conexao {
                     password);
             
             
-           // JOptionPane.showMessageDialog(null, "Conexão firebird realizada com sucesso");
+           // JOptionPane.showMessageDialog(null, "Conexão firebird realizada com sucesso " + url);
            // System.out.println(url);
             
             return conexao;
 
         } catch (SQLException ex) {
-             JOptionPane.showMessageDialog(null, "Conexão firebird falhou!");
+             JOptionPane.showMessageDialog(null, "Conexão firebird falhou!\nVerifique se o banco esta em:\nC:\\info Sistemas\\dados\\DOCSXML.FDB");
             System.out.println(ex.getMessage());
         }
         return null;
