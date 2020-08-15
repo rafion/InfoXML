@@ -14,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -62,15 +63,15 @@ public class FormDataBase extends javax.swing.JFrame {
         setTitle("Data Base Config");
         setResizable(false);
 
-        jLabel1.setText("Server host name:");
+        jLabel1.setText("* Server host name:");
 
-        jLabel2.setText("Port:");
+        jLabel2.setText("* Port:");
 
-        jLabel3.setText("Data base file:");
+        jLabel3.setText("* Data base file:");
 
-        jLabel4.setText("Adm user name:");
+        jLabel4.setText("* Adm user name:");
 
-        jLabel5.setText("Adm password:");
+        jLabel5.setText("* Adm password:");
 
         jLabel6.setText("DataBase URL:");
 
@@ -108,6 +109,7 @@ public class FormDataBase extends javax.swing.JFrame {
         });
 
         jTextFieldDataBaseFile.setEditable(false);
+        jTextFieldDataBaseFile.setAutoscrolls(false);
 
         jTextFieldUserName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -122,6 +124,7 @@ public class FormDataBase extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldDataBaseUrl.setAutoscrolls(false);
         jTextFieldDataBaseUrl.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextFieldDataBaseUrlKeyPressed(evt);
@@ -139,40 +142,37 @@ public class FormDataBase extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(jCheckBox1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(jTextFieldDataBaseFile, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jButton3))
-                                .addComponent(jTextFieldPort)
-                                .addComponent(jTextFieldUserName)
-                                .addComponent(jPasswordFieldAdmPassword)
-                                .addComponent(jTextFieldDataBaseUrl))
-                            .addComponent(jTextFieldServerHostName, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(23, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(117, 117, 117)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(97, 97, 97))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jCheckBox1))
+                .addGap(14, 14, 14)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextFieldUserName)
+                            .addComponent(jPasswordFieldAdmPassword)
+                            .addComponent(jTextFieldDataBaseUrl, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jTextFieldPort, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextFieldServerHostName, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jTextFieldDataBaseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -240,10 +240,11 @@ public class FormDataBase extends javax.swing.JFrame {
 
             configDb = new ConfigDb(jTextFieldServerHostName.getText(), jTextFieldPort.getText(), jTextFieldDataBaseFile.getText(), jTextFieldUserName.getText(), strPass, jTextFieldDataBaseUrl.getText(), jCheckBox1.isSelected());
             configDb.salvar();
-
+dispose();
         } else {
             JOptionPane.showMessageDialog(null, "Dados invalidos, Preencha corretamente");
         }
+        
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -295,7 +296,7 @@ public class FormDataBase extends javax.swing.JFrame {
             jTextFieldUserName.setText(configDb.getAdmUserNameDb());
             jPasswordFieldAdmPassword.setText(configDb.getPassword());
             jCheckBox1.setSelected(configDb.getRememberPassword());
-            jCheckBox1.setSelected(configDb.getRememberPassword());
+            jTextFieldDataBaseUrl.setText(configDb.getUrlDb());
 
         } catch (ClassNotFoundException erro) {
             JOptionPane.showMessageDialog(null, "Erro de classe erro = " + erro);
@@ -308,6 +309,13 @@ public class FormDataBase extends javax.swing.JFrame {
     }
 
     public static void main(String args[]) {
+        
+        //substitui a interfale da configuração padrão
+        try {
+            UIManager.setLookAndFeel("com.jtattoo.plaf.texture.TextureLookAndFeel");
+            // https://malalanayake.wordpress.com/2012/10/16/java-themes-with-jtattoo/
+        } catch (Exception e) {
+        }
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -315,7 +323,7 @@ public class FormDataBase extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }

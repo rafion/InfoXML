@@ -6,8 +6,11 @@
 package br.inf.infosistemas.interfaces;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import javax.swing.JOptionPane;
@@ -107,6 +110,32 @@ public class ConfigDb implements Serializable {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar gravar os dados no aquivo configDb.dat, erro: " + erro);
             }
         } 
+    
+   public static ConfigDb carregarConfigDb() throws FileNotFoundException, IOException, ClassNotFoundException {
+         ConfigDb conf = new ConfigDb();
+         try {
+             ObjectInputStream configLer = new ObjectInputStream(new FileInputStream("configDb.dat"));
+            
+           
+            conf = (ConfigDb) configLer.readObject();
+            return conf;
+            
+        } catch (ClassNotFoundException erro) {
+            JOptionPane.showMessageDialog(null, "Erro de classe erro = " + erro);
+        } catch (FileNotFoundException erro) {
+            JOptionPane.showMessageDialog(null, "O arquivo de configuração: infoxml.dat não foi encontrado.\nO sistema vai tentar conectar em:\n C:\\info Sistemas\\dados\\docsxml.fdb");
+
+        } catch (IOException erro) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar ler dados no arquivo de configurção: infoxml.dat erro= " + erro);
+        }
+         
+         
+         return null;
+   } 
+
+    public boolean isEmpty() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 
 }
