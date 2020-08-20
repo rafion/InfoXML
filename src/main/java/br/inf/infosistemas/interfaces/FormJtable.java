@@ -542,11 +542,15 @@ public class FormJtable extends javax.swing.JFrame {
                                             //firebird não suporta as operações acima 
                                             jProgressBarExportXml.setVisible(true);
                                             jProgressBarExportXml.setString("Exportando as NF-e");
+                                            String fileName; 
+                                            Blob mapBlob;
+                                            byte[] arquivo;
+                                            FileOutputStream fos = null;
                                             while (rs.next()) {
 
-                                                String fileName = rs.getString("ARQUIVO");
-                                                Blob mapBlob = rs.getBlob("XML");
-                                                byte[] arquivo = null;
+                                                fileName = rs.getString("ARQUIVO");
+                                                mapBlob = rs.getBlob("XML");
+                                                arquivo = null;
                                                 arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
 
                                                 // cria se o arquivo nao existir
@@ -561,7 +565,7 @@ public class FormJtable extends javax.swing.JFrame {
                                                     }
                                                 }
 
-                                                FileOutputStream fos = null;
+                                                fos = null;
                                                 try {
                                                     fos = new FileOutputStream(file);
                                                 } catch (FileNotFoundException ex) {
@@ -583,6 +587,9 @@ public class FormJtable extends javax.swing.JFrame {
                                                 }
 
                                                 fos.close();
+                                                fileName = null; 
+                                            mapBlob = null;
+                                             arquivo = null;
                                             }
                                             if (total > 0) {
                                                 JOptionPane.showMessageDialog(null, "XML das NF-e foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
@@ -654,15 +661,32 @@ public class FormJtable extends javax.swing.JFrame {
                                             int total = 0;
                                             jProgressBarExportXml.setVisible(true);
                                             jProgressBarExportXml.setString("Exportando as NFC-e");
+                                            String fileName;
+                                            Blob mapBlob;
+                                            int cancelado;
+                                            byte[] arquivo;
+                                            FileOutputStream fos = null;
                                             while (rs.next()) {
 
-                                                String fileName = rs.getString("CHAVE");
-                                                Blob mapBlob = rs.getBlob("ARQUIVO");
-                                                byte[] arquivo = null;
+                                                fileName = rs.getString("CHAVE");
+                                                 mapBlob = rs.getBlob("ARQUIVO");
+                                                cancelado = rs.getInt("CANCELADO");
+                                                //arquivo = null;
                                                 arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
 
                                                 // cria se o arquivo nao existir
-                                                File file = new File(path + "\\" + fileName + "-Nfc.xml");
+                                                File file = new File("");
+                                                if (cancelado==0) {
+                                                    file = new File(path + "\\" + fileName + "-Nfc.xml");
+                                                } else 
+                                                    if(cancelado==1) {
+                                                    file = new File(path + "\\" + fileName + "-Nfc-cancelado.xml");
+                                                } else {
+                                                    file = new File(path + "\\" + fileName + "-Nfc.xml");
+                                                    }
+                                                        
+                                                
+                                                
                                                 if (!file.exists()) {
                                                     try {
                                                         file.createNewFile();
@@ -673,7 +697,7 @@ public class FormJtable extends javax.swing.JFrame {
                                                     }
                                                 }
 
-                                                FileOutputStream fos = null;
+                                                fos = null;
                                                 try {
                                                     fos = new FileOutputStream(file);
                                                 } catch (FileNotFoundException ex) {
@@ -686,11 +710,24 @@ public class FormJtable extends javax.swing.JFrame {
                                                 }
                                                 total++;
                                                 jProgressBarExportXml.setValue(total);
+                                                
+                                             
+                                           
                                                 try {
                                                     sleep(100);
                                                 } catch (InterruptedException ex) {
                                                     System.out.println(ex.getMessage());
                                                 }
+                                                
+                                                try {
+                                                    fos.close();
+                                                } catch (IOException ex) {
+                                                    Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                                }
+                                                   fileName = null;
+                                            mapBlob  = null;
+                                            cancelado  = 0;
+                                            arquivo  = null;
 
                                             }
 
@@ -760,11 +797,16 @@ public class FormJtable extends javax.swing.JFrame {
                                             int total = 0;
                                             jProgressBarExportXml.setVisible(true);
                                             jProgressBarExportXml.setString("Exportando as Entradas");
+                                            
+                                            FileOutputStream fos;
+                                             String fileName;
+                                             Blob mapBlob; 
+                                             byte[] arquivo;
                                             while (rs.next()) {
 
-                                                String fileName = rs.getString("ARQUIVO");
-                                                Blob mapBlob = rs.getBlob("XML");
-                                                byte[] arquivo = null;
+                                                fileName = rs.getString("ARQUIVO");
+                                                mapBlob = rs.getBlob("XML");
+                                                //byte[] arquivo = null;
                                                 arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
 
                                                 // cria se o arquivo nao existir
@@ -775,7 +817,7 @@ public class FormJtable extends javax.swing.JFrame {
                                                     // System.out.println("Arquivo Criado!" + path + "\\" + fileName + ".xml");
                                                 }
 
-                                                FileOutputStream fos = new FileOutputStream(file);
+                                                fos = new FileOutputStream(file);
                                                 fos.write(arquivo);
                                                 total++;
                                                 jProgressBarExportXml.setValue(total);
@@ -785,6 +827,9 @@ public class FormJtable extends javax.swing.JFrame {
                                                     System.out.println(ex.getMessage());
                                                 }
                                                 fos.close();
+                                                 fileName = null;
+                                              mapBlob = null;
+                                              arquivo = null;
                                             }
 
                                             if (total > 0) {
