@@ -123,10 +123,10 @@ public class ConfigDb implements Serializable {
         } catch (ClassNotFoundException erro) {
             JOptionPane.showMessageDialog(null, "Erro de classe erro = " + erro);
         } catch (FileNotFoundException erro) {
-            JOptionPane.showMessageDialog(null, "O arquivo de configuração: infoxml.dat não foi encontrado.\nO sistema vai tentar conectar em:\n C:\\info Sistemas\\dados\\docsxml.fdb");
+            JOptionPane.showMessageDialog(null, "O arquivo de configuração: configDb.dat não foi encontrado.\nO sistema vai tentar conectar em:\n C:\\info Sistemas\\dados\\docsxml.fdb");
 
         } catch (IOException erro) {
-            JOptionPane.showMessageDialog(null, "Erro ao tentar ler dados no arquivo de configurção: infoxml.dat erro= " + erro);
+            JOptionPane.showMessageDialog(null, "Erro ao tentar ler dados no arquivo de configurção: configDb.dat erro= " + erro);
         }
          
          

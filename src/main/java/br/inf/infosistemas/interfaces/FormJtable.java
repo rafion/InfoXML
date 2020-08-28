@@ -6,6 +6,7 @@
 package br.inf.infosistemas.interfaces;
 
 import br.inf.infosistemas.dao.Conexao;
+import br.inf.infosistemas.util.WriteLog;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -595,6 +596,7 @@ public class FormJtable extends javax.swing.JFrame {
                                                 JOptionPane.showMessageDialog(null, "XML das NF-e foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
                                                 jProgressBarExportXml.setVisible(false);
                                                 jProgressBarExportXml.setValue(0);
+                                                WriteLog.writeLog("InfoXML.log", "Total NF-e exportadas: " + total );
                                             }
 
                                         }
@@ -735,6 +737,7 @@ public class FormJtable extends javax.swing.JFrame {
                                                 JOptionPane.showMessageDialog(null, "XML das NF-e foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
                                                 jProgressBarExportXml.setVisible(false);
                                                 jProgressBarExportXml.setValue(0);
+                                                WriteLog.writeLog("InfoXML.log", "Total NFC-e exportadas: " + total );
                                             }
                                         }
                                     } catch (SQLException ex) {
@@ -836,6 +839,7 @@ public class FormJtable extends javax.swing.JFrame {
                                                 JOptionPane.showMessageDialog(null, "XML das Entradas foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
                                                 jProgressBarExportXml.setVisible(false);
                                                 jProgressBarExportXml.setValue(0);
+                                                WriteLog.writeLog("InfoXML.log", "Total NFe de entrada exportadas: " + total );
                                             }
 
                                         }

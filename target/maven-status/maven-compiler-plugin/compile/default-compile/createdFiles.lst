@@ -25,6 +25,7 @@ br\inf\infosistemas\dao\Conexao.class
 br\inf\infosistemas\interfaces\FormJtable$11.class
 br\inf\infosistemas\interfaces\FormJtable$16.class
 br\inf\infosistemas\interfaces\FormDataBase$9.class
+br\inf\infosistemas\util\WriteLog.class
 br\inf\infosistemas\interfaces\FormDataBase$1.class
 br\inf\infosistemas\interfaces\FormDataBase.class
 br\inf\infosistemas\interfaces\FormDataBase$10.class
