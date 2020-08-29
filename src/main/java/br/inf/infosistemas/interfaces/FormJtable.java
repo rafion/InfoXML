@@ -6,6 +6,7 @@
 package br.inf.infosistemas.interfaces;
 
 import br.inf.infosistemas.dao.Conexao;
+import br.inf.infosistemas.util.LogToFile;
 import br.inf.infosistemas.util.WriteLog;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +22,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -511,6 +513,7 @@ public class FormJtable extends javax.swing.JFrame {
 
                                     } catch (SQLException ex) {
                                         Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                         LogToFile.log(ex, "severe", "Erro na conexão com o firebird");
                                     }
                                     stmt = null;
                                     rs = null;
@@ -543,7 +546,7 @@ public class FormJtable extends javax.swing.JFrame {
                                             //firebird não suporta as operações acima 
                                             jProgressBarExportXml.setVisible(true);
                                             jProgressBarExportXml.setString("Exportando as NF-e");
-                                            String fileName; 
+                                            String fileName;
                                             Blob mapBlob;
                                             byte[] arquivo;
                                             FileOutputStream fos = null;
@@ -588,20 +591,24 @@ public class FormJtable extends javax.swing.JFrame {
                                                 }
 
                                                 fos.close();
-                                                fileName = null; 
-                                            mapBlob = null;
-                                             arquivo = null;
+                                                fileName = null;
+                                                mapBlob = null;
+                                                arquivo = null;
                                             }
                                             if (total > 0) {
                                                 JOptionPane.showMessageDialog(null, "XML das NF-e foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
                                                 jProgressBarExportXml.setVisible(false);
                                                 jProgressBarExportXml.setValue(0);
-                                                WriteLog.writeLog("InfoXML.log", "Total NF-e exportadas: " + total );
+                                                WriteLog.writeLog("InfoXML.log", "Total NF-e exportadas: " + total);
+                                             // Exception ex= null;
+                                             //   LogToFile.log(ex, "info", "Total NF-e exportadas: " + total);
+                                             
                                             }
 
                                         }
                                     } catch (SQLException ex) {
                                         Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                     LogToFile.log(ex, "severe", "Erro na conexão com o firebird");
                                     } catch (IOException ex) {
                                         Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
                                     }
@@ -652,6 +659,7 @@ public class FormJtable extends javax.swing.JFrame {
                                         rs = stmt.executeQuery();
                                     } catch (SQLException ex) {
                                         Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                    LogToFile.log(ex, "severe", "Erro na conexão com o firebird");
                                     }
 
                                     try {
@@ -671,24 +679,21 @@ public class FormJtable extends javax.swing.JFrame {
                                             while (rs.next()) {
 
                                                 fileName = rs.getString("CHAVE");
-                                                 mapBlob = rs.getBlob("ARQUIVO");
+                                                mapBlob = rs.getBlob("ARQUIVO");
                                                 cancelado = rs.getInt("CANCELADO");
                                                 //arquivo = null;
                                                 arquivo = mapBlob.getBytes(1, (int) mapBlob.length());
 
                                                 // cria se o arquivo nao existir
                                                 File file = new File("");
-                                                if (cancelado==0) {
+                                                if (cancelado == 0) {
                                                     file = new File(path + "\\" + fileName + "-Nfc.xml");
-                                                } else 
-                                                    if(cancelado==1) {
+                                                } else if (cancelado == 1) {
                                                     file = new File(path + "\\" + fileName + "-Nfc-cancelado.xml");
                                                 } else {
                                                     file = new File(path + "\\" + fileName + "-Nfc.xml");
-                                                    }
-                                                        
-                                                
-                                                
+                                                }
+
                                                 if (!file.exists()) {
                                                     try {
                                                         file.createNewFile();
@@ -712,24 +717,22 @@ public class FormJtable extends javax.swing.JFrame {
                                                 }
                                                 total++;
                                                 jProgressBarExportXml.setValue(total);
-                                                
-                                             
-                                           
+
                                                 try {
                                                     sleep(100);
                                                 } catch (InterruptedException ex) {
                                                     System.out.println(ex.getMessage());
                                                 }
-                                                
+
                                                 try {
                                                     fos.close();
                                                 } catch (IOException ex) {
                                                     Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
                                                 }
-                                                   fileName = null;
-                                            mapBlob  = null;
-                                            cancelado  = 0;
-                                            arquivo  = null;
+                                                fileName = null;
+                                                mapBlob = null;
+                                                cancelado = 0;
+                                                arquivo = null;
 
                                             }
 
@@ -737,10 +740,11 @@ public class FormJtable extends javax.swing.JFrame {
                                                 JOptionPane.showMessageDialog(null, "XML das NF-e foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
                                                 jProgressBarExportXml.setVisible(false);
                                                 jProgressBarExportXml.setValue(0);
-                                                WriteLog.writeLog("InfoXML.log", "Total NFC-e exportadas: " + total );
+                                                WriteLog.writeLog("InfoXML.log", "Total NFC-e exportadas: " + total);
                                             }
                                         }
                                     } catch (SQLException ex) {
+                                         LogToFile.log(ex, "severe", "Erro na conexão com o firebird");
                                         Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
                                     }
 
@@ -789,6 +793,7 @@ public class FormJtable extends javax.swing.JFrame {
                                         rs = stmt.executeQuery();
                                     } catch (SQLException ex) {
                                         Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
+                                    LogToFile.log(ex, "severe", "Erro na conexão com o firebird");
                                     }
 
                                     try {
@@ -800,11 +805,11 @@ public class FormJtable extends javax.swing.JFrame {
                                             int total = 0;
                                             jProgressBarExportXml.setVisible(true);
                                             jProgressBarExportXml.setString("Exportando as Entradas");
-                                            
+
                                             FileOutputStream fos;
-                                             String fileName;
-                                             Blob mapBlob; 
-                                             byte[] arquivo;
+                                            String fileName;
+                                            Blob mapBlob;
+                                            byte[] arquivo;
                                             while (rs.next()) {
 
                                                 fileName = rs.getString("ARQUIVO");
@@ -830,28 +835,29 @@ public class FormJtable extends javax.swing.JFrame {
                                                     System.out.println(ex.getMessage());
                                                 }
                                                 fos.close();
-                                                 fileName = null;
-                                              mapBlob = null;
-                                              arquivo = null;
+                                                fileName = null;
+                                                mapBlob = null;
+                                                arquivo = null;
                                             }
 
                                             if (total > 0) {
                                                 JOptionPane.showMessageDialog(null, "XML das Entradas foram exportados com sucesso!\nTotal de arquivos: " + total + "\nDiretorio: " + path);
                                                 jProgressBarExportXml.setVisible(false);
                                                 jProgressBarExportXml.setValue(0);
-                                                WriteLog.writeLog("InfoXML.log", "Total NFe de entrada exportadas: " + total );
+                                                WriteLog.writeLog("InfoXML.log", "Total NFe de entrada exportadas: " + total);
                                             }
 
                                         }
                                     } catch (SQLException ex) {
                                         Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
-                                    } catch (IOException ex) {
+                                     LogToFile.log(ex, "severe", "Erro na conexão com o firebird");
+                                    }
+                                    catch (IOException ex) {
                                         Logger.getLogger(FormJtable.class.getName()).log(Level.SEVERE, null, ex);
                                     }
 
                                 }
                                 jProgressBarExportXml.setVisible(false);
-                                
 
                             } else {
                                 JOptionPane.showMessageDialog(null, "Digite um periodo valido!");

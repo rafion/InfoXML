@@ -28,6 +28,7 @@ br\inf\infosistemas\interfaces\FormDataBase$9.class
 br\inf\infosistemas\util\WriteLog.class
 br\inf\infosistemas\interfaces\FormDataBase$1.class
 br\inf\infosistemas\interfaces\FormDataBase.class
+br\inf\infosistemas\util\LogToFile.class
 br\inf\infosistemas\interfaces\FormDataBase$10.class
 br\inf\infosistemas\interfaces\FormDataBase$8.class
 br\inf\infosistemas\interfaces\FormDataBase$6.class

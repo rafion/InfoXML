@@ -20,18 +20,15 @@ import java.util.Date;
 public class WriteLog {
     
     public static void writeLog(String fileName, String info) {
-    //String filename = "activity.log";
-    //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-    
+       
     String FILENAME = fileName;
-    //String FILENAME = "C:\\testing\\" + fileName;
     BufferedWriter bw = null;
     FileWriter fw = null;
     try {
         fw = new FileWriter(FILENAME, true);
         bw = new BufferedWriter(fw);
-        bw.write( getCurrentTimeString()  + " - "+  info);
-        bw.write("\n");
+        bw.write("\r\n" + getCurrentTimeString()  + " - "+  info);
+        //bw.write("\n");
     } catch (IOException e) {
         e.printStackTrace();
     } finally {
